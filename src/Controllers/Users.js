@@ -1,32 +1,54 @@
 const User = require("../database/models/User");
 const fieldValidator = require("../validators/fieldValidator");
 
-module.exports = {
-  all(req, res, next) {
-    User.findAll()
-      .then((result) => {
-        res.json(result);
-      })
-      .catch(next);
-  },
+const all = async (req, res) => {
+  try {
+    const results = await User.findAll();
+    res.json(results);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
 
-  create(req, res, next) {
-    const { username, email, fullName, password } = req.body;
+const byId = async (req, res) => {
+  try {
+    const results = await User.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
 
-    // VALIDACAO CAMPOS
-    if (fieldValidator(username, email, fullName, password) == true) {
-      res.status(401).json({ error: "Invalid fields" });
+    if (results === null) {
+      res
+        .status(404)
+        .json({ error: `Usuário de ID ${req.params.id} não encontrado` });
     }
+    res.json(results);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
 
-    User.create({
-      username,
-      email,
-      fullName,
-      password,
-    })
-      .then((result) => {
-        res.status(201).json(result); //return with ID -> 201 (CREATED)
-      })
-      .catch(next);
-  },
+const create = async (req, res) => {
+  const { username, email, fullName, password } = req.body;
+
+  // VALIDACAO CAMPOS
+  if (fieldValidator(username, email, fullName, password) == true) {
+    res.status(401).json({ error: "Invalid fields" });
+  }
+
+  const createUser = User.create({
+    username,
+    email,
+    fullName,
+    password,
+  });
+
+  res.status(201).json(createUser);
+};
+
+module.exports = {
+  all,
+  byId,
+  create,
 };
