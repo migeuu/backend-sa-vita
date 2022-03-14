@@ -30,21 +30,26 @@ const byId = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { username, email, fullName, password } = req.body;
+  try {
+    const { username, email, fullName, password } = req.body;
 
-  // VALIDACAO CAMPOS
-  if (fieldValidator(username, email, fullName, password) == true) {
-    res.status(401).json({ error: "Invalid fields" });
+    // VALIDACAO CAMPOS
+    if (fieldValidator(username, email, fullName, password) === true) {
+      res.status(401).json({ error: "Invalid fields" });
+      return;
+    }
+
+    const createUser = User.create({
+      username,
+      email,
+      fullName,
+      password,
+    });
+
+    res.status(201).json(createUser);
+  } catch (err) {
+    console.error(err.message);
   }
-
-  const createUser = User.create({
-    username,
-    email,
-    fullName,
-    password,
-  });
-
-  res.status(201).json(createUser);
 };
 
 module.exports = {
