@@ -9,5 +9,7 @@ router.get("/", (req, res) => {
 router.get("/users", Users.all);
 router.get("/users/:id", Users.byId);
 router.post("/users", Users.create);
+router.patch("/users/:id", Users.update);
+router.delete("/users/:id", Users.deleteUser);
 
 module.exports = router;

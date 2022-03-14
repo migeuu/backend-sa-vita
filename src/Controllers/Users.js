@@ -52,8 +52,70 @@ const create = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const removeUser = await User.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    res
+      .status(202)
+      .json({ message: `Usuário de ID ${req.params.id} excluído` }, removeUser);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+const update = async (req, res) => {
+  try {
+    const { username, email, fullName, password } = req.body;
+
+    await User.update(
+      {
+        username: username,
+      },
+      {
+        where: { id: req.params.id },
+      }
+    );
+
+    await User.update(
+      {
+        email: email,
+      },
+      {
+        where: { id: req.params.id },
+      }
+    );
+
+    await User.update(
+      {
+        fullName: fullName,
+      },
+      {
+        where: { id: req.params.id },
+      }
+    );
+
+    await User.update(
+      {
+        password: password,
+      },
+      {
+        where: { id: req.params.id },
+      }
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
 module.exports = {
   all,
   byId,
   create,
+  update,
+  deleteUser,
 };
