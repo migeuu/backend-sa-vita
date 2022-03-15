@@ -4,6 +4,12 @@ const fieldValidator = require("../validators/fieldValidator");
 const all = async (req, res) => {
   try {
     const results = await User.findAll();
+
+    if (results === null) {
+      res.status(404).json({ error: `Nenhum usuário encontrado` });
+      return;
+    }
+
     res.json(results);
   } catch (err) {
     console.error(err.message);
@@ -46,7 +52,7 @@ const create = async (req, res) => {
       password,
     });
 
-    res.status(201).json(createUser);
+    res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
   } catch (err) {
     console.error(err.message);
   }
@@ -62,7 +68,7 @@ const deleteUser = async (req, res) => {
 
     res
       .status(202)
-      .json({ message: `Usuário de ID ${req.params.id} excluído` }, removeUser);
+      .json({ message: `Usuário de ID ${req.params.id} excluído` });
   } catch (err) {
     console.error(err.message);
   }
@@ -107,6 +113,8 @@ const update = async (req, res) => {
         where: { id: req.params.id },
       }
     );
+
+    res.json({ message: "Usuário atualizado!" });
   } catch (err) {
     console.error(err.message);
   }
