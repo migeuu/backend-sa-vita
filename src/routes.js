@@ -8,6 +8,8 @@ router.get("/", (req, res) => {
 });
 router.get("/users", Users.all);
 router.get("/users/:id", Users.byId);
+router.get("/users/username/:username", Users.byUsername);
+router.get("/users/email/:email", Users.byEmail);
 router.post("/users", Users.create);
 router.patch("/users/:id", Users.update);
 router.delete("/users/:id", Users.deleteUser);

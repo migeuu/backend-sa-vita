@@ -35,6 +35,40 @@ const byId = async (req, res) => {
   }
 };
 
+const byUsername = async (req, res) => {
+  try {
+    const results = await User.findOne({
+      where: {
+        username: req.params.username,
+      },
+    });
+
+    if (results === null) {
+      console.log("usuario nao encontrado");
+    }
+    res.json(results);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+const byEmail = async (req, res) => {
+  try {
+    const results = await User.findOne({
+      where: {
+        email: req.params.email,
+      },
+    });
+
+    if (results === null) {
+      console.log("usuario nao encontrado");
+    }
+    res.json(results);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
 const create = async (req, res) => {
   try {
     const { username, email, fullName, password } = req.body;
@@ -123,6 +157,8 @@ const update = async (req, res) => {
 module.exports = {
   all,
   byId,
+  byUsername,
+  byEmail,
   create,
   update,
   deleteUser,
