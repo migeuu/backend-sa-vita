@@ -1,7 +1,6 @@
 const { DataTypes } = require("sequelize");
 
 const sequelize = require("../sequelize");
-const Post = require("./Post.js");
 
 const User = sequelize.define("user", {
   username: {
@@ -12,6 +11,11 @@ const User = sequelize.define("user", {
   fullName: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true,
     unique: false,
   },
   email: {
@@ -26,12 +30,9 @@ const User = sequelize.define("user", {
   },
 });
 
-// User.hasMany(Post);
-// Post.belongsTo(User);
-
 //create table if not exists...
 const init = async () => {
-  await User.sync();
+  await User.sync({ alter: true });
 };
 
 init();

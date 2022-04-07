@@ -110,7 +110,7 @@ const deleteUser = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { username, email, fullName, password } = req.body;
+    const { username, email, fullName, description, password } = req.body;
 
     await User.update(
       {
@@ -133,6 +133,15 @@ const update = async (req, res) => {
     await User.update(
       {
         fullName: fullName,
+      },
+      {
+        where: { id: req.params.id },
+      }
+    );
+
+    await User.update(
+      {
+        description: description,
       },
       {
         where: { id: req.params.id },
